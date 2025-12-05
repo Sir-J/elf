@@ -5,6 +5,7 @@ export interface Todo {
   id: number;
   title: string;
   completed: boolean;
+  sensitiveData?: string;
 }
 
 const { state, config } = createState(withEntities<Todo>());
@@ -20,7 +21,7 @@ export function createTodo(id: number): Todo {
 export function toMatchSnapshot(
   expect: jest.Expect,
   store: Store,
-  label: string
+  label: string,
 ) {
   return expect(store.getValue()).toMatchSnapshot(label);
 }

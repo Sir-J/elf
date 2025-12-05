@@ -9,7 +9,6 @@ import {
   ItemPredicate,
 } from './entity.state';
 import { Query } from '@ngneat/elf';
-import { checkPluck } from './entity.utils';
 
 /**
  *
@@ -22,7 +21,7 @@ import { checkPluck } from './entity.utils';
  */
 export function getAllEntities<
   S extends EntitiesState<Ref>,
-  Ref extends EntitiesRef = DefaultEntitiesRef
+  Ref extends EntitiesRef = DefaultEntitiesRef,
 >(options: BaseEntityOptions<Ref> = {}): Query<S, getEntityType<S, Ref>[]> {
   const { ref: { entitiesKey, idsKey } = defaultEntitiesRef } = options;
 
@@ -43,12 +42,12 @@ export function getAllEntities<
 export function getAllEntitiesApply<
   S extends EntitiesState<Ref>,
   Ref extends EntitiesRef = DefaultEntitiesRef,
-  R = getEntityType<S, Ref>
+  R = getEntityType<S, Ref>,
 >(
   options: {
     mapEntity?(entity: getEntityType<S, Ref>): R;
     filterEntity?(entity: getEntityType<S, Ref>): boolean;
-  } & BaseEntityOptions<Ref>
+  } & BaseEntityOptions<Ref>,
 ): Query<S, R[]> {
   const {
     ref: { entitiesKey, idsKey } = defaultEntitiesRef,
@@ -81,11 +80,11 @@ export function getAllEntitiesApply<
  */
 export function getEntity<
   S extends EntitiesState<Ref>,
-  Ref extends EntitiesRef = DefaultEntitiesRef
+  Ref extends EntitiesRef = DefaultEntitiesRef,
 >(
   id: getIdType<S, Ref>,
 
-  options: BaseEntityOptions<Ref> = {}
+  options: BaseEntityOptions<Ref> = {},
 ): Query<S, getEntityType<S, Ref> | undefined> {
   return function (state) {
     const { ref: { entitiesKey } = defaultEntitiesRef } = options;
@@ -105,10 +104,10 @@ export function getEntity<
  */
 export function getEntityByPredicate<
   S extends EntitiesState<Ref>,
-  Ref extends EntitiesRef = DefaultEntitiesRef
+  Ref extends EntitiesRef = DefaultEntitiesRef,
 >(
   predicate: ItemPredicate<getEntityType<S, Ref>>,
-  options: BaseEntityOptions<Ref> = {}
+  options: BaseEntityOptions<Ref> = {},
 ): Query<S, getEntityType<S, Ref> | undefined> {
   return function (state) {
     const { ref: { entitiesKey, idsKey } = defaultEntitiesRef } = options;
@@ -123,44 +122,6 @@ export function getEntityByPredicate<
 
 /**
  *
- * Get many entities by predicate
- *
- * @example
- *
- * store.query(geManyByPredicate(({ active }) => active))
- * store.query(geManyByPredicate((el: Todo) => el.active, { pluck: 'title' }))
- * store.query(geManyByPredicate((el: Todo) => el.active, { ref: UIEntitiesRef, pluck: 'title' }))
- */
-export function getManyByPredicate<
-  S extends EntitiesState<Ref>,
-  R extends getEntityType<S, Ref>[],
-  K extends keyof getEntityType<S, Ref>,
-  Ref extends EntitiesRef = DefaultEntitiesRef
->(
-  predicate: ItemPredicate<getEntityType<S, Ref>>,
-  options?: {
-    pluck?: K | ((entity: getEntityType<S, Ref>) => R);
-  } & BaseEntityOptions<Ref>
-): Query<S, getEntityType<S, Ref>[]> {
-  return function (state) {
-    const { ref: { entitiesKey, idsKey } = defaultEntitiesRef, pluck } =
-      options || {};
-    const filteredEntities: getEntityType<S, Ref>[] = [];
-
-    state[idsKey].forEach((id: getIdType<S, Ref>, index: number) => {
-      const entity = state[entitiesKey][id];
-
-      if (predicate(entity, index)) {
-        filteredEntities.push(checkPluck(entity, pluck));
-      }
-    });
-
-    return filteredEntities;
-  };
-}
-
-/**
- *
  * Check whether the entity exist
  *
  * @example
@@ -170,11 +131,11 @@ export function getManyByPredicate<
  */
 export function hasEntity<
   S extends EntitiesState<Ref>,
-  Ref extends EntitiesRef = DefaultEntitiesRef
+  Ref extends EntitiesRef = DefaultEntitiesRef,
 >(
   id: getIdType<S, Ref>,
 
-  options: BaseEntityOptions<Ref> = {}
+  options: BaseEntityOptions<Ref> = {},
 ): Query<S, boolean> {
   return function (state) {
     const { ref: { entitiesKey } = defaultEntitiesRef } = options;
@@ -194,7 +155,7 @@ export function hasEntity<
  */
 export function getEntitiesIds<
   S extends EntitiesState<Ref>,
-  Ref extends EntitiesRef = DefaultEntitiesRef
+  Ref extends EntitiesRef = DefaultEntitiesRef,
 >(options: BaseEntityOptions<Ref> = {}): Query<S, getIdType<S, Ref>[]> {
   return function (state) {
     const { ref: { idsKey } = defaultEntitiesRef } = options;

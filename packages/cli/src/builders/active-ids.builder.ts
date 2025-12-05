@@ -12,14 +12,14 @@ export class ActiveIdsBuilder extends FeatureBuilder {
     return factory.createCallExpression(
       factory.createIdentifier('withActiveIds'),
       undefined,
-      []
+      [],
     );
   }
 
   run() {
     this.addImport(
       ['withActiveIds', 'selectActiveEntities', 'toggleActiveIds'],
-      '@ngneat/elf-entities'
+      '@ngneat/elf-entities',
     );
 
     const initializer = `${this.storeVariableName}.pipe(selectActiveEntities())`;
@@ -28,14 +28,14 @@ export class ActiveIdsBuilder extends FeatureBuilder {
       kind: StructureKind.Property,
     };
 
-    if (this.isStoreInlinedInClass) {
+    if (this.repoConstructor) {
       this.repo.insertProperty(0, {
         ...memberData,
         type: `Observable<${this.storeSingularNames.className}[]>`,
       });
 
-      this.repoConstructor?.addStatements(
-        `this.${memberData.name} = ${initializer};`
+      this.repoConstructor.addStatements(
+        `this.${memberData.name} = ${initializer};`,
       );
     } else {
       this.repo.insertMember(0, {

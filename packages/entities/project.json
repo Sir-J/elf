@@ -3,6 +3,7 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/entities/src",
   "projectType": "library",
+  "tags": [],
   "targets": {
     "build": {
       "executor": "@nrwl/rollup:rollup",
@@ -15,16 +16,6 @@
         "entryFile": "packages/entities/src/index.ts",
         "rollupConfig": "@nx/react/plugins/bundle-rollup",
         "format": ["esm", "cjs"],
-        "globals": [
-          {
-            "global": "Rx",
-            "moduleId": "rxjs"
-          },
-          {
-            "global": "Rx",
-            "moduleId": "rxjs/operators"
-          }
-        ],
         "assets": [
           {
             "glob": "packages/entities/*.md",
@@ -35,18 +26,14 @@
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
-      "options": {
-        "lintFilePatterns": ["packages/entities/**/*.ts"]
-      },
+      "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"]
     },
     "test": {
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/packages/entities"],
       "options": {
-        "jestConfig": "packages/entities/jest.config.ts",
-        "passWithNoTests": true
+        "jestConfig": "packages/entities/jest.config.ts"
       }
     },
     "version": {
@@ -55,6 +42,5 @@
         "syncVersions": false
       }
     }
-  },
-  "tags": []
+  }
 }

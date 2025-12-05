@@ -3,6 +3,7 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/cli-ng/src",
   "projectType": "library",
+  "tags": [],
   "targets": {
     "build": {
       "executor": "@nrwl/rollup:rollup",
@@ -25,18 +26,14 @@
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
-      "outputs": ["{options.outputFile}"],
-      "options": {
-        "lintFilePatterns": ["packages/cli-ng/**/*.ts"]
-      }
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
     },
     "test": {
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/packages/cli-ng"],
       "options": {
-        "jestConfig": "packages/cli-ng/jest.config.ts",
-        "passWithNoTests": true
+        "jestConfig": "packages/cli-ng/jest.config.ts"
       }
     },
     "version": {
@@ -45,6 +42,5 @@
         "syncVersions": false
       }
     }
-  },
-  "tags": []
+  }
 }

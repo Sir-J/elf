@@ -5,14 +5,16 @@
     </a>
     <div class="float-end">
       <ul class="collapse navbar-collapse navbar-nav">
-        <li *ngFor="let item of navItems" class="nav-item ms-2">
-          <a
-            routerLinkActive="active"
-            [routerLink]="item.link"
-            class="nav-link"
-            >{{ item.label }}</a
-          >
-        </li>
+        @for (item of navItems; track item) {
+          <li class="nav-item ms-2">
+            <a
+              routerLinkActive="active"
+              [routerLink]="item.link"
+              class="nav-link"
+              >{{ item.label }}</a
+            >
+          </li>
+        }
       </ul>
     </div>
   </div>

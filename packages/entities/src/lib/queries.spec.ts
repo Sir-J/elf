@@ -12,7 +12,6 @@ import {
   hasEntity,
   getEntitiesIds,
   getEntityByPredicate,
-  getManyByPredicate,
 } from './queries';
 import { addEntities } from './add.mutation';
 import { UIEntitiesRef } from './entity.state';
@@ -70,17 +69,17 @@ describe('queries', () => {
             completed: false,
           },
           createTodo(3),
-        ])
+        ]),
       );
       expect(
-        store.query(getEntityByPredicate((el) => el.title === `todo 2`))?.id
+        store.query(getEntityByPredicate((el) => el.title === `todo 2`))?.id,
       ).toEqual(4);
     });
 
     it('should work with ref', () => {
       const store = createUIEntityStore();
       expect(store.query(getEntity(1, { ref: UIEntitiesRef }))).toEqual(
-        undefined
+        undefined,
       );
 
       const todo = createUITodo(1);
@@ -92,19 +91,19 @@ describe('queries', () => {
       const store = createUIEntityStore();
       expect(
         store.query(
-          getEntityByPredicate((el) => el.id === 1, { ref: UIEntitiesRef })
-        )
+          getEntityByPredicate((el) => el.id === 1, { ref: UIEntitiesRef }),
+        ),
       ).toEqual(undefined);
 
       store.update(
         addEntities([createUITodo(1), createUITodo(2), createUITodo(3)], {
           ref: UIEntitiesRef,
-        })
+        }),
       );
       expect(
         store.query(
-          getEntityByPredicate((el) => el.id === 2, { ref: UIEntitiesRef })
-        )?.id
+          getEntityByPredicate((el) => el.id === 2, { ref: UIEntitiesRef }),
+        )?.id,
       ).toEqual(2);
     });
   });
@@ -164,13 +163,13 @@ describe('queries', () => {
     store.update(addEntities([createTodo(1), createTodo(2)]));
 
     const entities = store.query(
-      getAllEntitiesApply({ filterEntity: (e) => e.id === 1 })
+      getAllEntitiesApply({ filterEntity: (e) => e.id === 1 }),
     );
 
     expectTypeOf(entities).toEqualTypeOf<Todo[]>();
 
     const titles = store.query(
-      getAllEntitiesApply({ mapEntity: (e) => e.title })
+      getAllEntitiesApply({ mapEntity: (e) => e.title }),
     );
 
     expectTypeOf(titles).toEqualTypeOf<string[]>();
@@ -188,107 +187,12 @@ describe('queries', () => {
         getAllEntitiesApply({
           mapEntity: (e) => e.title,
           filterEntity: (e) => e.id === 1,
-        })
-      )
+        }),
+      ),
     ).toMatchInlineSnapshot(`
       Array [
         "todo 1",
       ]
     `);
-  });
-
-  describe('getManyByPredicate', () => {
-    it('should return the collection', () => {
-      const store = createEntitiesStore();
-      store.update(addEntities(createTodo(1)));
-      store.update(addEntities(createTodo(2)));
-      store.update(addEntities(createTodo(3)));
-      store.update(addEntities(createTodo(4)));
-      expect(
-        store.query(getManyByPredicate((el: Todo) => [2, 3].includes(el.id)))
-      ).toMatchInlineSnapshot(`
-        Array [
-          Object {
-            "completed": false,
-            "id": 2,
-            "title": "todo 2",
-          },
-          Object {
-            "completed": false,
-            "id": 3,
-            "title": "todo 3",
-          },
-        ]
-      `);
-    });
-    it('should work with pluck', () => {
-      const store = createEntitiesStore();
-      store.update(addEntities(createTodo(1)));
-      store.update(addEntities(createTodo(2)));
-      store.update(addEntities(createTodo(3)));
-      store.update(addEntities(createTodo(4)));
-      expect(
-        store.query(
-          getManyByPredicate((el: Todo) => [4, 3].includes(el.id), {
-            pluck: 'id',
-          })
-        )
-      ).toMatchInlineSnapshot(`
-        Array [
-          3,
-          4,
-        ]
-      `);
-    });
-
-    it('should work with ref', () => {
-      const store = createUIEntityStore();
-
-      store.update(addEntities(createUITodo(1), { ref: UIEntitiesRef }));
-      store.update(addEntities(createUITodo(2), { ref: UIEntitiesRef }));
-      store.update(addEntities(createUITodo(3), { ref: UIEntitiesRef }));
-      store.update(addEntities(createUITodo(4), { ref: UIEntitiesRef }));
-      expect(
-        store.query(
-          getManyByPredicate(
-            (el: { id: number; open: boolean }) => [2, 3].includes(el.id),
-            { ref: UIEntitiesRef }
-          )
-        )
-      ).toMatchInlineSnapshot(`
-        Array [
-          Object {
-            "id": 2,
-            "open": false,
-          },
-          Object {
-            "id": 3,
-            "open": false,
-          },
-        ]
-      `);
-    });
-
-    it('should work with ref and pluck', () => {
-      const store = createUIEntityStore();
-
-      store.update(addEntities(createUITodo(1), { ref: UIEntitiesRef }));
-      store.update(addEntities(createUITodo(2), { ref: UIEntitiesRef }));
-      store.update(addEntities(createUITodo(3), { ref: UIEntitiesRef }));
-      store.update(addEntities(createUITodo(4), { ref: UIEntitiesRef }));
-      expect(
-        store.query(
-          getManyByPredicate(
-            (el: { id: number; open: boolean }) => [2, 3].includes(el.id),
-            { ref: UIEntitiesRef, pluck: 'id' }
-          )
-        )
-      ).toMatchInlineSnapshot(`
-        Array [
-          2,
-          3,
-        ]
-      `);
-    });
   });
 });

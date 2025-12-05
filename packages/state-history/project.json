@@ -3,6 +3,7 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/state-history/src",
   "projectType": "library",
+  "tags": [],
   "targets": {
     "build": {
       "executor": "@nrwl/rollup:rollup",
@@ -35,18 +36,14 @@
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
-      "options": {
-        "lintFilePatterns": ["packages/state-history/**/*.ts"]
-      },
+      "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"]
     },
     "test": {
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/packages/state-history"],
       "options": {
-        "jestConfig": "packages/state-history/jest.config.ts",
-        "passWithNoTests": true
+        "jestConfig": "packages/state-history/jest.config.ts"
       }
     },
     "version": {
@@ -55,6 +52,5 @@
         "syncVersions": false
       }
     }
-  },
-  "tags": []
+  }
 }

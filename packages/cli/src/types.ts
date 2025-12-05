@@ -9,7 +9,7 @@ export interface Options {
   path: string;
   idKey: string;
   template?: 'class' | 'functions';
-  inlineStoreInClass?: boolean;
+  inlineStoreInClass?: boolean | 'withoutConstructor';
   hooks?: Array<Hooks>;
 }
 
@@ -36,7 +36,7 @@ export interface GlobalConfig {
   };
 }
 
-export type Features = typeof baseFeatures[number]['value'];
+export type Features = (typeof baseFeatures)[number]['value'];
 
 export const baseClassStorePlaces = [
   { name: 'Outside of a class', value: false },
